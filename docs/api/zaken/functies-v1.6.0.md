@@ -669,86 +669,112 @@ table.filterable-table td:nth-child(6) {
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const entiteitFilter = document.getElementById('entiteit-filter');
-  const bereikFilter = document.getElementById('bereik-filter');
-  const statusFilter = document.getElementById('status-filter');
-  const applyButton = document.getElementById('apply-filters');
-  const clearButton = document.getElementById('clear-filters');
-  const table = document.getElementById('functies-table');
-  const tbody = table.querySelector('tbody');
-  const rows = Array.from(tbody.querySelectorAll('tr'));
+(function() {
+  function setupFilters() {
+    const table = document.getElementById('functies-table');
+    if (!table || table.dataset.filtersInitialized === 'true') {
+      return;
+    }
 
-  // Add status classes to table cells (now column 4 instead of 3)
-  rows.forEach(row => {
-    const statusCell = row.cells[4];
-    const status = statusCell.textContent.trim().toLowerCase();
-    statusCell.className = 'status-' + status;
-  });
+    const entiteitFilter = document.getElementById('entiteit-filter');
+    const bereikFilter = document.getElementById('bereik-filter');
+    const statusFilter = document.getElementById('status-filter');
+    const applyButton = document.getElementById('apply-filters');
+    const clearButton = document.getElementById('clear-filters');
+    const tbody = table.querySelector('tbody');
 
-  function filterTable() {
-    const entiteitValue = entiteitFilter.value.toLowerCase();
-    const bereikValue = bereikFilter.value;
-    const statusValue = statusFilter.value;
+    if (!entiteitFilter || !bereikFilter || !statusFilter || !applyButton || !clearButton || !tbody) {
+      return;
+    }
+
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    table.dataset.filtersInitialized = 'true';
 
     rows.forEach(row => {
-      const entiteit = row.cells[1].textContent.toLowerCase();
-      const bereik = row.cells[2].textContent.toLowerCase();
-      const status = row.dataset.status;
-
-      // For entiteit filter, handle both simple entities and nested paths
-      let entiteitMatch = true;
-      if (entiteitValue) {
-        entiteitMatch = entiteit === entiteitValue || 
-                       entiteit.startsWith(entiteitValue + '/') ||
-                       entiteit.startsWith(entiteitValue + '{');
+      const statusCell = row.cells[4];
+      if (!statusCell) {
+        return;
       }
-      
-      const bereikMatch = !bereikValue || bereik === bereikValue.toLowerCase();
-      const statusMatch = !statusValue || status === statusValue;
-
-      if (entiteitMatch && bereikMatch && statusMatch) {
-        row.classList.remove('hidden');
-      } else {
-        row.classList.add('hidden');
-      }
+      const status = statusCell.textContent.trim().toLowerCase();
+      statusCell.className = 'status-' + status;
     });
+
+    function updateRowCount() {
+      const visibleRows = rows.filter(row => !row.classList.contains('hidden')).length;
+      const totalRows = rows.length;
+
+      let countDisplay = table.parentNode.querySelector('.row-count');
+      if (!countDisplay) {
+        countDisplay = document.createElement('div');
+        countDisplay.className = 'row-count';
+        countDisplay.style.marginTop = '10px';
+        countDisplay.style.fontSize = '14px';
+        countDisplay.style.color = 'var(--md-default-fg-color--light)';
+        table.parentNode.appendChild(countDisplay);
+      }
+
+      countDisplay.textContent = `Toont ${visibleRows} van ${totalRows} handelingen`;
+    }
+
+    function filterTable() {
+      const entiteitValue = entiteitFilter.value.toLowerCase();
+      const bereikValue = bereikFilter.value;
+      const statusValue = statusFilter.value;
+
+      rows.forEach(row => {
+        const entiteit = row.cells[1].textContent.toLowerCase();
+        const bereik = row.cells[2].textContent.toLowerCase();
+        const status = (row.dataset.status || '').toLowerCase();
+
+        let entiteitMatch = true;
+        if (entiteitValue) {
+          entiteitMatch = entiteit === entiteitValue ||
+            entiteit.startsWith(entiteitValue + '/') ||
+            entiteit.startsWith(entiteitValue + '{');
+        }
+
+        const bereikMatch = !bereikValue || bereik === bereikValue.toLowerCase();
+        const statusMatch = !statusValue || status === statusValue.toLowerCase();
+
+        if (entiteitMatch && bereikMatch && statusMatch) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+
+      updateRowCount();
+    }
+
+    function clearFilters() {
+      entiteitFilter.value = '';
+      bereikFilter.value = '';
+      statusFilter.value = '';
+      filterTable();
+    }
+
+    applyButton.addEventListener('click', filterTable);
+    clearButton.addEventListener('click', clearFilters);
 
     updateRowCount();
   }
 
-  function updateRowCount() {
-    const visibleRows = rows.filter(row => !row.classList.contains('hidden')).length;
-    const totalRows = rows.length;
-    
-    // Update or create row count display
-    let countDisplay = document.getElementById('row-count');
-    if (!countDisplay) {
-      countDisplay = document.createElement('div');
-      countDisplay.id = 'row-count';
-      countDisplay.style.marginTop = '10px';
-      countDisplay.style.fontSize = '14px';
-      countDisplay.style.color = 'var(--md-default-fg-color--light)';
-      table.parentNode.appendChild(countDisplay);
+  function onReady(callback) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', callback, { once: true });
+    } else {
+      callback();
     }
-    
-    countDisplay.textContent = `Toont ${visibleRows} van ${totalRows} handelingen`;
   }
 
-  function clearFilters() {
-    entiteitFilter.value = '';
-    bereikFilter.value = '';
-    statusFilter.value = '';
-    filterTable();
+  onReady(setupFilters);
+
+  if (typeof window.document$ !== 'undefined' && window.document$) {
+    window.document$.subscribe(() => {
+      setupFilters();
+    });
   }
-
-  // Event listeners
-  applyButton.addEventListener('click', filterTable);
-  clearButton.addEventListener('click', clearFilters);
-
-  // Initialize
-  updateRowCount();
-});
+})();
 </script>
 
 ## Deel 2: Gedetailleerde Beschrijving Functionele Handelingen
