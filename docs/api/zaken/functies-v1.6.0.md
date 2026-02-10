@@ -598,38 +598,38 @@ genereren.
   color: var(--md-default-fg-color);
 }
 
-.filterable-table th:nth-child(1),
-.filterable-table td:nth-child(1) {
+table.filterable-table th:nth-child(1),
+table.filterable-table td:nth-child(1) {
   width: 30%;
 }
 
-.filterable-table th:nth-child(2),
-.filterable-table td:nth-child(2) {
+table.filterable-table th:nth-child(2),
+table.filterable-table td:nth-child(2) {
   width: 18%;
 }
 
-.filterable-table th:nth-child(3),
-.filterable-table td:nth-child(3) {
-  width: 110px;
-  min-width: 110px;
-  max-width: 110px;
+table.filterable-table th:nth-child(3),
+table.filterable-table td:nth-child(3) {
+  width: 125px;
+  min-width: 125px;
+  max-width: 125px;
 }
 
-.filterable-table th:nth-child(4),
-.filterable-table td:nth-child(4) {
+table.filterable-table th:nth-child(4),
+table.filterable-table td:nth-child(4) {
   width: 32%;
 }
 
-.filterable-table th:nth-child(5),
-.filterable-table td:nth-child(5) {
+table.filterable-table th:nth-child(5),
+table.filterable-table td:nth-child(5) {
   width: 110px;
   min-width: 110px;
   max-width: 110px;
   white-space: nowrap;
 }
 
-.filterable-table th:nth-child(6),
-.filterable-table td:nth-child(6) {
+table.filterable-table th:nth-child(6),
+table.filterable-table td:nth-child(6) {
   width: 80px;
   min-width: 80px;
   max-width: 80px;
