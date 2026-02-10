@@ -68,28 +68,6 @@ Deze repository is primair bedoeld voor:
 
 ---
 
-## Structuur (indicatief)
-
-De documentatie is functioneel opgebouwd, bijvoorbeeld langs de volgende lijnen:
-
-- `capabilities/`  
-  Functionele mogelijkheden van zaakgericht werken
-
-- `scenario’s/`  
-  Praktische gebruiksscenario’s en ketens
-
-- `services/`  
-  Functionele beschrijving van services (los van API’s)
-
-- `begrippen/`  
-  Uitleg en afbakening van kernbegrippen
-
-- `mapping/`  
-  Conceptuele relatie tussen functionaliteit en API-standaard
-
-De exacte structuur kan evolueren naarmate het model groeit.
-
----
 
 ## Status en ontwikkeling
 
