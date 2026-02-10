@@ -1,0 +1,133 @@
+openapi: 3.0.3
+info:
+  title: Zaken API
+  version: 2.0.0
+  description: Versie 2 van de API voor het beheren van zaken binnen het Gemma Zaken ecosysteem
+
+servers:
+  - url: https://api.example.com/v2
+    description: Productie server v2
+
+paths:
+  /zaken:
+    get:
+      summary: Haal zaken op met uitgebreide filtering
+      description: Retourneert een gefilterde en gepagineerde lijst van zaken
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: zaaktype
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+      responses:
+        '200':
+          description: Succesvolle response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ZaakV2'
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+    post:
+      summary: Maak nieuwe zaken aan (bulk)
+      description: Creëert een of meerdere nieuwe zaken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ZaakInputV2'
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/ZaakInputV2'
+      responses:
+        '201':
+          description: Zaken succesvol aangemaakt
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ZaakV2'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/ZaakV2'
+
+components:
+  schemas:
+    ZaakV2:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        identificatie:
+          type: string
+        omschrijving:
+          type: string  
+        zaaktype:
+          type: string
+        status:
+          type: string
+        startdatum:
+          type: string
+          format: date
+        einddatum:
+          type: string
+          format: date
+          nullable: true
+        metadata:
+          type: object
+          additionalProperties: true
+        tags:
+          type: array
+          items:
+            type: string
+    ZaakInputV2:
+      type: object
+      required:
+        - identificatie
+        - omschrijving
+        - zaaktype
+      properties:
+        identificatie:
+          type: string
+        omschrijving:
+          type: string
+        zaaktype:
+          type: string
+        startdatum:
+          type: string
+          format: date
+        metadata:
+          type: object
+          additionalProperties: true
+        tags:
+          type: array
+          items:
+            type: string

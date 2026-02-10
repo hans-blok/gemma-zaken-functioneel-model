@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  title: Zaken API
+  version: 1.0.0
+  description: API voor het beheren van zaken binnen het Gemma Zaken ecosysteem
+
+servers:
+  - url: https://api.example.com/v1
+    description: Productie server
+
+paths:
+  /zaken:
+    get:
+      summary: Haal alle zaken op
+      description: Retourneert een lijst van alle zaken
+      responses:
+        '200':
+          description: Succesvolle response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Zaak'
+    post:
+      summary: Maak een nieuwe zaak aan
+      description: Creëert een nieuwe zaak
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZaakInput'
+      responses:
+        '201':
+          description: Zaak succesvol aangemaakt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zaak'
+
+  /zaken/{uuid}:
+    get:
+      summary: Haal een specifieke zaak op
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Succesvolle response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zaak'
+        '404':
+          description: Zaak niet gevonden
+
+components:
+  schemas:
+    Zaak:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        identificatie:
+          type: string
+        omschrijving:
+          type: string
+        zaaktype:
+          type: string
+        status:
+          type: string
+        startdatum:
+          type: string
+          format: date
+    ZaakInput:
+      type: object
+      required:
+        - identificatie
+        - omschrijving
+        - zaaktype
+      properties:
+        identificatie:
+          type: string
+        omschrijving:
+          type: string
+        zaaktype:
+          type: string
+        startdatum:
+          type: string
+          format: date
