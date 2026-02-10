@@ -61,7 +61,7 @@ genereren.
 <table id="functies-table" class="filterable-table">
 <thead>
 <tr>
-<th>Functionele Handeling</th>
+<th>Functionele handeling</th>
 <th>Entiteit</th>
 <th>Bereik</th>
 <th>Samenvatting</th>
@@ -588,6 +588,8 @@ genereren.
   padding: 12px;
   text-align: left;
   border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .filterable-table th {
@@ -596,12 +598,44 @@ genereren.
   color: var(--md-default-fg-color);
 }
 
-.filterable-table th:nth-child(1) { width: 25%; } /* Functionele Handeling */
-.filterable-table th:nth-child(2) { width: 15%; } /* Entiteit */
-.filterable-table th:nth-child(3) { width: 10%; } /* Bereik */
-.filterable-table th:nth-child(4) { width: 35%; } /* Samenvatting */
-.filterable-table th:nth-child(5) { width: 8%; }  /* Status */
-.filterable-table th:nth-child(6) { width: 7%; }  /* Details */
+.filterable-table th:nth-child(1),
+.filterable-table td:nth-child(1) {
+  width: 30%;
+}
+
+.filterable-table th:nth-child(2),
+.filterable-table td:nth-child(2) {
+  width: 18%;
+}
+
+.filterable-table th:nth-child(3),
+.filterable-table td:nth-child(3) {
+  width: 110px;
+  min-width: 110px;
+  max-width: 110px;
+}
+
+.filterable-table th:nth-child(4),
+.filterable-table td:nth-child(4) {
+  width: 32%;
+}
+
+.filterable-table th:nth-child(5),
+.filterable-table td:nth-child(5) {
+  width: 110px;
+  min-width: 110px;
+  max-width: 110px;
+  white-space: nowrap;
+}
+
+.filterable-table th:nth-child(6),
+.filterable-table td:nth-child(6) {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  white-space: nowrap;
+  text-align: center;
+}
 
 .filterable-table tr:hover {
   background-color: #f8f9fa;
@@ -662,8 +696,14 @@ document.addEventListener('DOMContentLoaded', function() {
       const bereik = row.cells[2].textContent.toLowerCase();
       const status = row.dataset.status;
 
-      // For entiteit filter, check if entiteit contains the selected value or if it's a nested endpoint
-      const entiteitMatch = !entiteitValue || entiteit.includes(entiteitValue) || entiteit.startsWith(entiteitValue);
+      // For entiteit filter, handle both simple entities and nested paths
+      let entiteitMatch = true;
+      if (entiteitValue) {
+        entiteitMatch = entiteit === entiteitValue || 
+                       entiteit.startsWith(entiteitValue + '/') ||
+                       entiteit.startsWith(entiteitValue + '{');
+      }
+      
       const bereikMatch = !bereikValue || bereik === bereikValue.toLowerCase();
       const statusMatch = !statusValue || status === statusValue;
 

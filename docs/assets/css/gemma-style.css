@@ -72,9 +72,9 @@ h1 {
 }
 
 h2 {
-  color: var(--utrecht-blue);
-  font-weight: 600;
-  font-size: 1.75rem;
+  color: var(--utrecht-red);
+  font-weight: 700;
+  font-size: 1.5rem;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
@@ -89,12 +89,12 @@ h3 {
 
 /* Links */
 a {
-  color: var(--utrecht-blue);
+  color: var(--utrecht-red);
   text-decoration: none;
 }
 
 a:hover {
-  color: var(--utrecht-red);
+  color: var(--utrecht-dark-gray);
   text-decoration: underline;
 }
 
@@ -249,6 +249,29 @@ button:hover, .md-nav__button:hover {
 
 .success-text {
   color: var(--success-green);
+}
+
+/* Uniform table width for berichten pages */
+.berichten-table,
+.md-content table {
+  min-width: 100%;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.berichten-table th:first-child,
+.md-content table th:first-child {
+  width: 20%;
+}
+
+.berichten-table th:nth-child(2),
+.md-content table th:nth-child(2) {
+  width: 20%;
+}
+
+.berichten-table th:nth-child(3),
+.md-content table th:nth-child(3) {
+  width: 60%;
 }
 
 /* API status indicators */

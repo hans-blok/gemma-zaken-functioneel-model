@@ -40,8 +40,8 @@ theme:
     - search.highlight
     - search.share
   palette:
-    primary: "blue"
-    accent: "light-blue"
+    primary: "red"
+    accent: "red"
   icon:
     repo: fontawesome/brands/github
 
